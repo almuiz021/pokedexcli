@@ -1,3 +1,8 @@
-makeScript.sh
+# Ignore the repl.log file
 repl.log
+
+# Ignore the compiled pokedexcli binary
 pokedexcli
+
+# Ignore the makeScript shell script
+makeScript.sh
