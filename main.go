@@ -1,17 +1,18 @@
 package main
 
 import (
-	"strings"
+	"time"
+
+	"github.com/almuiz021/pokedexcli/internal/pokeapi"
 )
 
+func main() {
+	pokeClient := pokeapi.NewClient(5 * time.Second)
 
-func cleanInput(text string) []string{
-	lowerCased := strings.ToLower(text)
-	stringArr := strings.Fields(lowerCased)
-	return stringArr
-}
-
-
-func main(){
-	startRepl()
+	// config is on heap and cfg is on stack [ 48bytes and 8bytes ]
+	// cfg points to config
+	cfg := &config{
+		pokeapiClient: pokeClient,
+	}
+	startRepl(cfg)
 }
