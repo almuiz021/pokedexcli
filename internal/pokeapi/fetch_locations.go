@@ -8,6 +8,7 @@ import (
 )
 
 func (c *Client) FetchLocations(pageUrl *string) (RespLocations, error) {
+	respLocations := RespLocations{}
 
 	url := baseUrl + "location-area"
 	if pageUrl != nil {
@@ -15,27 +16,42 @@ func (c *Client) FetchLocations(pageUrl *string) (RespLocations, error) {
 		url = *pageUrl
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return RespLocations{}, fmt.Errorf("error creating new request: %w", err)
+	var mainData []byte
+
+	cacheData, exists := c.myCache.Get(url)
+
+	if exists {
+		mainData = cacheData
+		fmt.Printf("Cache Hit: %s\n", url)
+	} else {
+
+		fmt.Println("Cache Miss")
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return RespLocations{}, fmt.Errorf("error creating new request: %w", err)
+		}
+
+		res, err := c.httpClient.Do(req)
+		if err != nil {
+			return RespLocations{}, fmt.Errorf("error getting response: %w", err)
+		}
+
+		defer res.Body.Close()
+
+		data, err := io.ReadAll(res.Body)
+		if err != nil {
+			return RespLocations{}, fmt.Errorf("error reading data: %w", err)
+		}
+
+		mainData = data
+
+		c.myCache.Add(url, data)
+
+		fmt.Printf("Cache Added : %s\n", url)
 	}
 
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return RespLocations{}, fmt.Errorf("error getting response: %w", err)
-	}
-
-	respLocations := RespLocations{}
-
-	defer res.Body.Close()
-
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return RespLocations{}, fmt.Errorf("error reading data: %w", err)
-	}
-
-	if err := json.Unmarshal(data, &respLocations); err != nil {
-		return RespLocations{}, fmt.Errorf("error while unmarshalling data: %s into JSON: %w", string(data), err)
+	if err := json.Unmarshal(mainData, &respLocations); err != nil {
+		return RespLocations{}, fmt.Errorf("error while unmarshalling data: %s into JSON: %w", string(cacheData), err)
 	}
 
 	return respLocations, nil

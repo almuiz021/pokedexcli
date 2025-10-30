@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	pokeClient := pokeapi.NewClient(5 * time.Second)
+	pokeClient := pokeapi.NewClient(5*time.Second, 5*time.Minute)
 
 	// config is on heap and cfg is on stack [ 48bytes and 8bytes ]
 	// cfg points to config
