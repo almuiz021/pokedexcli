@@ -17,6 +17,7 @@ func (c *Client) GetLocation(areaName string) (RespLocationAreas, error) {
 
 			return RespLocationAreas{}, fmt.Errorf("error unmarshalling data: %s", err)
 		}
+		return respLocAreas, nil
 	}
 
 	req, err := http.NewRequest("GET", url, nil)
