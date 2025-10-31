@@ -69,25 +69,30 @@ func getCommands() map[string]cliCommand {
 			description: "Displays a help message",
 			callback:    commandHelp,
 		},
+		"catch": {
+			name:        "catch <pokemon_name>",
+			description: "Attempt to catch a pokemon",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect <pokemon_name>",
+			description: "View details about a caught Pokemon",
+			callback:    commandInspect,
+		},
+		"explore": {
+			name:        "explore <location_name>",
+			description: "Explore a location",
+			callback:    commandExplore,
+		},
 		"map": {
 			name:        "map",
-			description: "Gets Next 20 Location-Area Names",
+			description: "Get the next page of locations",
 			callback:    commandMap,
 		},
 		"mapb": {
 			name:        "mapb",
-			description: "Gets Previous 20 Location-Area Names",
+			description: "Get the previous page of locations",
 			callback:    commandMapb,
-		},
-		"explore": {
-			name:        "explore locationAreaName",
-			description: "Gets Pokemon in the given location area",
-			callback:    commandExplore,
-		},
-		"catch": {
-			name:        "catch pokemonName",
-			description: "Catches Pokemon and stores your pokemon",
-			callback:    commandCatch,
 		},
 		"exit": {
 			name:        "exit",
