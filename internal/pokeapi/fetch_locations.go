@@ -22,10 +22,8 @@ func (c *Client) FetchLocations(pageUrl *string) (RespLocations, error) {
 
 	if exists {
 		mainData = cacheData
-		fmt.Printf("Cache Hit: %s\n", url)
 	} else {
 
-		fmt.Println("Cache Miss")
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
 			return RespLocations{}, fmt.Errorf("error creating new request: %w", err)
@@ -47,7 +45,6 @@ func (c *Client) FetchLocations(pageUrl *string) (RespLocations, error) {
 
 		c.myCache.Add(url, data)
 
-		fmt.Printf("Cache Added : %s\n", url)
 	}
 
 	if err := json.Unmarshal(mainData, &respLocations); err != nil {
