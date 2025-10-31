@@ -5,6 +5,7 @@ import (
 )
 
 func commandHelp(cfg *config, args ...string) error {
+	fmt.Println()
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
@@ -12,6 +13,9 @@ func commandHelp(cfg *config, args ...string) error {
 	for cmdName, cmd := range getCommands() {
 		fmt.Printf("%s: %s\n", cmdName, cmd.description)
 	}
+	fmt.Println()
+	fmt.Println()
+	fmt.Println()
 	// os.Exit(0)
 	return nil
 }
